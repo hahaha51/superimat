@@ -31,6 +31,15 @@
             border: 2px solid #ccc;
             margin: 140px auto 20px auto;
             background-color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #heatmap img {
+            width: 100%;
+            height: auto;
+            max-width: 240px;
+            max-height: 240px;
         }
         .results {
             margin: 20px 0;
@@ -107,6 +116,7 @@
                 width: 100%;
                 height: auto;
                 max-width: 240px;
+                max-height: 240px;
                 margin-top: 160px;
             }
             .results p {
@@ -159,8 +169,6 @@
             heatmapDiv.innerHTML = '';
             const img = new Image();
             img.src = canvas.toDataURL();
-            img.style.width = '100%';
-            img.style.height = '100%';
             heatmapDiv.appendChild(img);
 
             // Update Left and Right Foot Arch Index as a sample
