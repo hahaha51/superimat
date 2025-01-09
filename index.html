@@ -29,7 +29,7 @@
             width: 480px;
             height: 480px;
             border: 2px solid #ccc;
-            margin: 80px auto 20px auto;
+            margin: 140px auto 20px auto;
             background-color: #ffffff;
         }
         .results {
@@ -48,8 +48,24 @@
             border-radius: 15px;
             border: 1px solid #ccc;
         }
-        .gauge-container::before { content: 'Left'; position: absolute; top: 50%; left: 5px; transform: translateY(-50%); font-size: 14px; color: white; }
-        .gauge-container::after { content: 'Right'; position: absolute; top: 50%; right: 5px; transform: translateY(-50%); font-size: 14px; color: white; }
+        .gauge-container::before {
+            content: 'Left';
+            position: absolute;
+            top: 50%;
+            left: 5px;
+            transform: translateY(-50%);
+            font-size: 14px;
+            color: white;
+        }
+        .gauge-container::after {
+            content: 'Right';
+            position: absolute;
+            top: 50%;
+            right: 5px;
+            transform: translateY(-50%);
+            font-size: 14px;
+            color: white;
+        }
         .gauge-indicator {
             position: absolute;
             top: 50%;
@@ -90,6 +106,7 @@
             #heatmap {
                 width: 100%;
                 height: auto;
+                margin-top: 160px;
             }
             .results p {
                 font-size: 16px;
@@ -146,8 +163,8 @@
             heatmapDiv.appendChild(img);
 
             // Update Left and Right Foot Arch Index as a sample
-            const leftArchIndex = 0.20;
-            const rightArchIndex = 0.30;
+            const leftArchIndex = 0.23;
+            const rightArchIndex = 0.25;
             document.getElementById('left-arch-index').innerText = leftArchIndex.toFixed(2);
             document.getElementById('right-arch-index').innerText = rightArchIndex.toFixed(2);
 
@@ -182,8 +199,8 @@
 
         // Initial label update on page load
         document.addEventListener('DOMContentLoaded', () => {
-            updateArchLabel(0.20, 'left');
-            updateArchLabel(0.30, 'right');
+            updateArchLabel(0.23, 'left');
+            updateArchLabel(0.25, 'right');
         });
     </script>
 </body>
