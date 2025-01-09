@@ -26,9 +26,8 @@
             z-index: 100;
         }
         #heatmap {
-            width: 100%;
-            max-width: 480px;
-            aspect-ratio: 29 / 20;
+            width: 240px;
+            height: 240px;
             border: 2px solid #ccc;
             margin: 140px auto 20px auto;
             background-color: #ffffff;
@@ -106,7 +105,8 @@
         @media (max-width: 480px) {
             #heatmap {
                 width: 100%;
-                max-width: 100%;
+                height: auto;
+                max-width: 240px;
                 margin-top: 160px;
             }
             .results p {
