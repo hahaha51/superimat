@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plantar Pressure Heatmap Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f5;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+        }
+        h1 {
+            color: #4CAF50;
+            background-color: #e0f7fa;
+            padding: 20px 0;
+            border-radius: 0;
+            width: 100%;
+            margin: 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            text-align: center;
+            z-index: 100;
+        }
+        #heatmap {
+            width: 480px;
+            height: 480px;
+            border: 2px solid #ccc;
+            margin: 80px auto 20px auto;
+            background-color: #ffffff;
+        }
+        .results {
+            margin: 20px 0;
+            font-size: 18px;
+            padding-bottom: 100px;
+            overflow: hidden;
+        }
+        .gauge-container {
+            width: 100%;
+            max-width: 480px;
+            margin: 20px auto;
+            position: relative;
+            height: 30px;
+            background: linear-gradient(to right, #f44336, #FFEB3B, #4CAF50, #FFEB3B, #f44336);
+            border-radius: 15px;
+            border: 1px solid #ccc;
+        }
+        .gauge-container::before { content: 'Left'; position: absolute; top: 50%; left: 5px; transform: translateY(-50%); font-size: 14px; color: white; }
+        .gauge-container::after { content: 'Right'; position: absolute; top: 50%; right: 5px; transform: translateY(-50%); font-size: 14px; color: white; }
+        .gauge-indicator {
+            position: absolute;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            left: 50%;
+            width: 10px;
+            height: 30px;
+            background-color: #000;
+            border-radius: 5px;
+        }
+        .gauge-percentage {
+            margin-top: 10px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #2196F3;
+            color: white;
+            padding: 15px 0;
+            font-size: 16px;
+            border: none;
+            border-radius: 0;
+            cursor: pointer;
+            display: inline-block;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            z-index: 101;
+        }
+        button:hover {
+            background-color: #1976D2;
+        }
+        .footer {
+            display: none;
+        }
+        @media (max-width: 480px) {
+            #heatmap {
+                width: 100%;
+                height: auto;
+            }
+            .results p {
+                font-size: 16px;
+            }
+            .results {
+                padding-bottom: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Plantar Pressure Heatmap Generator</h1>
+
+    <div id="heatmap">Heatmap will be displayed here</div>
+
+    <div class="gauge-container">
+        <div class="gauge-indicator" id="gauge-indicator"></div>
+    </div>
+    <div class="gauge-percentage" id="gauge-percentage">50% Center</div>
+
+    <div class="results">
+        <p><strong>Left Foot Arch Index:</strong> <span id="left-arch-index">0.23</span> (<span id="left-arch-label">Normal Arch</span>)</p>
+        <p><strong>Right Foot Arch Index:</strong> <span id="right-arch-index">0.25</span> (<span id="right-arch-label">Normal Arch</span>)</p>
+    </div>
+
+    <button onclick="generateHeatmap()">Generate Heatmap</button>
+
+    <script>
+        function generateHeatmap() {
+            // Generate 586 random numbers between 0 and 100
+            const data = Array.from({ length: 586 }, () => Math.floor(Math.random() * 101));
+
+            // Create a canvas element to draw the heatmap
+            const canvas = document.createElement('canvas');
+            canvas.width = 29;
+            canvas.height = 20;
+            const ctx = canvas.getContext('2d');
+
+            // Draw the heatmap
+            for (let i = 0; i < data.length; i++) {
+                const value = data[i];
+                const color = `rgb(${255 - value * 2.55}, ${value * 2.55}, 0)`;
+                ctx.fillStyle = color;
+                ctx.fillRect(i % 29, Math.floor(i / 29), 1, 1);
+            }
+
+            // Convert the canvas to an image and display it in the heatmap div
+            const heatmapDiv = document.getElementById('heatmap');
+            heatmapDiv.innerHTML = '';
+            const img = new Image();
+            img.src = canvas.toDataURL();
+            img.style.width = '100%';
+            img.style.height = '100%';
+            heatmapDiv.appendChild(img);
+
+            // Update Left and Right Foot Arch Index as a sample
+            const leftArchIndex = 0.20;
+            const rightArchIndex = 0.30;
+            document.getElementById('left-arch-index').innerText = leftArchIndex.toFixed(2);
+            document.getElementById('right-arch-index').innerText = rightArchIndex.toFixed(2);
+
+            // Update Left and Right Arch Labels
+            updateArchLabel(leftArchIndex, 'left');
+            updateArchLabel(rightArchIndex, 'right');
+
+            // Simulate weight distribution update
+            const leftPercentage = 42;
+            const rightPercentage = 58;
+            const gaugeIndicator = document.getElementById('gauge-indicator');
+            const gaugePercentage = document.getElementById('gauge-percentage');
+
+            const offset = (rightPercentage - leftPercentage) / 2;
+            gaugeIndicator.style.left = `${50 + offset}%`;
+            gaugePercentage.innerText = `${rightPercentage}% Right / ${leftPercentage}% Left`;
+        }
+
+        function updateArchLabel(archIndex, side) {
+            let archType;
+            if (archIndex < 0.21) {
+                archType = 'High Arch';
+            } else if (archIndex > 0.26) {
+                archType = 'Low Arch';
+            } else {
+                archType = 'Normal Arch';
+            }
+
+            const labelElement = document.getElementById(`${side}-arch-label`);
+            labelElement.innerText = archType;
+        }
+
+        // Initial label update on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            updateArchLabel(0.20, 'left');
+            updateArchLabel(0.30, 'right');
+        });
+    </script>
+</body>
+</html>
